@@ -5,7 +5,6 @@ import { IconButton } from "../ui/IconButton";
 import { Avatar } from "../ui/Avatar";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import { useAuth } from "../../context/AuthContext";
-import { useApp } from "../../context/AppContext";
 import type { User } from "../../types";
 
 const NAV_ITEMS = [

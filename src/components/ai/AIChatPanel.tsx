@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { streamReflection, type ChatMessage } from "../../services/ai";
 import { Icon } from "../ui/Icon";
 import type { Verse } from "../../types";
@@ -13,7 +13,7 @@ export function AIChatPanel({ verse, open, onClose }: AIChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (open && messages.length === 0) {
@@ -27,10 +27,12 @@ export function AIChatPanel({ verse, open, onClose }: AIChatPanelProps) {
   }, [open, verse.reference, messages.length]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({
-      top: scrollRef.current.scrollHeight,
-      behavior: "smooth",
-    });
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [messages, streaming]);
 
   if (!open) return null;
@@ -72,7 +74,6 @@ export function AIChatPanel({ verse, open, onClose }: AIChatPanelProps) {
 
   return (
     <>
-      {/* Desktop side panel */}
       <div className="fixed right-0 top-16 z-40 hidden h-[calc(100vh-4rem)] w-[400px] flex-col border-l border-zinc-200 bg-white shadow-xl lg:flex dark:border-zinc-800 dark:bg-zinc-900">
         <Header verse={verse} onClose={onClose} />
         <Messages ref={scrollRef} messages={messages} streaming={streaming} />
@@ -84,7 +85,6 @@ export function AIChatPanel({ verse, open, onClose }: AIChatPanelProps) {
         />
       </div>
 
-      {/* Mobile fullscreen */}
       <div className="fixed inset-0 z-[80] flex flex-col bg-white lg:hidden dark:bg-zinc-900">
         <Header verse={verse} onClose={onClose} />
         <Messages ref={scrollRef} messages={messages} streaming={streaming} />
@@ -120,46 +120,45 @@ function Header({ verse, onClose }: { verse: Verse; onClose: () => void }) {
   );
 }
 
-const Messages = ({
-  ref,
-  messages,
-  streaming,
-}: {
-  ref: React.RefObject<HTMLDivElement>;
+interface MessagesProps {
   messages: ChatMessage[];
   streaming: boolean;
-}) => (
-  <div
-    ref={ref}
-    className="flex-1 space-y-4 overflow-y-auto px-4 py-5"
-  >
-    {messages.map((m, i) => (
-      <div
-        key={i}
-        className={`flex gap-2.5 ${
-          m.role === "user" ? "justify-end" : ""
-        }`}
-      >
-        {m.role === "assistant" && (
-          <span className="mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-zinc-900 text-[10px] font-bold text-zinc-50">
-            AI
-          </span>
-        )}
+}
+
+const Messages = forwardRef<HTMLDivElement | null, MessagesProps>(
+  ({ messages, streaming }, ref) => (
+    <div
+      ref={ref}
+      className="flex-1 space-y-4 overflow-y-auto px-4 py-5"
+    >
+      {messages.map((m, i) => (
         <div
-          className={`max-w-[85%] whitespace-pre-wrap text-[13.5px] leading-relaxed ${
-            m.role === "user"
-              ? "rounded-2xl rounded-br-sm bg-zinc-900 px-3.5 py-2.5 text-zinc-50"
-              : "text-zinc-700 dark:text-zinc-300"
+          key={i}
+          className={`flex gap-2.5 ${
+            m.role === "user" ? "justify-end" : ""
           }`}
         >
-          {renderMarkdown(m.content)}
-          {streaming && i === messages.length - 1 && m.role === "assistant" && (
-            <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-zinc-400 align-middle" />
+          {m.role === "assistant" && (
+            <span className="mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-zinc-900 text-[10px] font-bold text-zinc-50">
+              AI
+            </span>
           )}
+          <div
+            className={`max-w-[85%] whitespace-pre-wrap text-[13.5px] leading-relaxed ${
+              m.role === "user"
+                ? "rounded-2xl rounded-br-sm bg-zinc-900 px-3.5 py-2.5 text-zinc-50"
+                : "text-zinc-700 dark:text-zinc-300"
+            }`}
+          >
+            {renderMarkdown(m.content)}
+            {streaming && i === messages.length - 1 && m.role === "assistant" && (
+              <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-zinc-400 align-middle" />
+            )}
+          </div>
         </div>
-      </div>
-    ))}
-  </div>
+      ))}
+    </div>
+  )
 );
 
 Messages.displayName = "Messages";
@@ -206,7 +205,6 @@ function Composer({
   );
 }
 
-// tiny markdown: **bold** and *italic*
 function renderMarkdown(text: string) {
   const parts: React.ReactNode[] = [];
   const regex = /(\*\*[^*]+\*\*|\*[^*]+\*)/g;

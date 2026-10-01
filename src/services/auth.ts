@@ -9,7 +9,6 @@ export interface Session {
 }
 
 const TOKEN_KEY = "session";
-const DEMO_PASSWORD = "password123"; // any password works in demo mode
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
