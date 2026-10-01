@@ -16,6 +16,7 @@ const items: NavRow[] = [
   { path: "/stories", label: "Stories", icon: "library" },
   { path: "/journal", label: "Journal", icon: "journal" },
   { path: "/week/letter", label: "Weekly Letter", icon: "journal" },
+  { path: "/settings", label: "Settings", icon: "settings" },
 ];
 
 export function Sidebar() {

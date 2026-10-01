@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import Onboarding from "./pages/Onboarding";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
@@ -77,6 +78,7 @@ export default function App() {
               <Route path="/topics" element={<Topics />} />
               <Route path="/saved" element={<Saved />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

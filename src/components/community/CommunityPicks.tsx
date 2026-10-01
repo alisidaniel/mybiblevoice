@@ -1,0 +1,112 @@
+import { useState } from "react";
+import { communityPicks, type CommunityPick } from "../../data/community";
+import { Icon } from "../ui/Icon";
+
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d`;
+}
+
+export function CommunityPicks() {
+  const [reacted, setReacted] = useState<Record<string, boolean>>({});
+
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="mb-3 flex items-center justify-between">
+        <div className="text-[10.5px] font-semibold uppercase tracking-widest text-zinc-400">
+          Community picks
+        </div>
+        <span className="text-[10.5px] text-zinc-400">
+          {communityPicks.length} today
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {communityPicks.map((pick) => (
+          <PickCard
+            key={pick.id}
+            pick={pick}
+            reacted={!!reacted[pick.id]}
+            onReact={() =>
+              setReacted((r) => ({ ...r, [pick.id]: !r[pick.id] }))
+            }
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PickCard({
+  pick,
+  reacted,
+  onReact,
+}: {
+  pick: CommunityPick;
+  reacted: boolean;
+  onReact: () => void;
+}) {
+  const reactions = pick.reactions + (reacted ? 1 : 0);
+
+  return (
+    <article className="border-b border-zinc-100 pb-3 last:border-none last:pb-0 dark:border-zinc-800">
+      <div className="mb-2 flex items-center gap-2">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-zinc-200 text-[10px] font-bold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200">
+          {pick.user.initials}
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 text-[11.5px]">
+            <span className="font-medium text-zinc-900 dark:text-zinc-100">
+              {pick.user.name}
+            </span>
+            <span className="text-zinc-400">·</span>
+            <span className="text-zinc-400">{timeAgo(pick.postedAt)}</span>
+          </div>
+        </div>
+        <span className="rounded-full border border-zinc-200 px-2 py-0.5 text-[10px] font-medium capitalize text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+          {pick.topic}
+        </span>
+      </div>
+
+      <p className="mb-2 text-[12.5px] leading-relaxed text-zinc-600 dark:text-zinc-300">
+        {pick.content}
+      </p>
+
+      <div className="mb-2 flex items-center gap-2 text-[11px]">
+        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+          {pick.reference}
+        </span>
+      </div>
+
+      <div className="flex items-center gap-3 text-[11px] text-zinc-400">
+        <button
+          onClick={onReact}
+          className={`inline-flex items-center gap-1 transition-colors ${
+            reacted
+              ? "text-zinc-900 dark:text-zinc-100"
+              : "hover:text-zinc-900 dark:hover:text-zinc-100"
+          }`}
+        >
+          <Icon
+            name="heart"
+            size={11}
+            className={reacted ? "fill-current" : ""}
+          />
+          {reactions}
+        </button>
+        <span className="inline-flex items-center gap-1">
+          <Icon name="journal" size={11} />
+          {pick.comments}
+        </span>
+        <button className="ml-auto inline-flex items-center gap-1 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100">
+          <Icon name="share" size={11} />
+        </button>
+      </div>
+    </article>
+  );
+}

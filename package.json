@@ -19,6 +19,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@tanstack/react-query": "^5.28.0",
+    "jspdf": "^4.2.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.48.0",

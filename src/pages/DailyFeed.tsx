@@ -9,6 +9,8 @@ import { useVerse } from "../hooks/useVerse";
 import { relatedStories } from "../data/stories";
 import { formatLongDate } from "../lib/date";
 import { Icon } from "../components/ui/Icon";
+import { Toast, type ToastData } from "../components/ui/Toast";
+
 
 function VerseSkeleton() {
   return (
@@ -26,6 +28,7 @@ export default function DailyFeed() {
   const { data, loading, error } = useVerse();
   const [amenActive, setAmenActive] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [toast, setToast] = useState<ToastData | null>(null);
 
   const saved = data ? isVerseSaved(data.verse.id) : false;
 
@@ -92,6 +95,7 @@ export default function DailyFeed() {
           />
         </>
       )}
+      <Toast toast={toast} onClose={() => setToast(null)} />
 
       <StoryGrid stories={relatedStories} />
     </div>

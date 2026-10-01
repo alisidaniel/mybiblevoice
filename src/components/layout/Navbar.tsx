@@ -101,6 +101,14 @@ export function Navbar({ user }: NavbarProps) {
                   navigate("/week/letter");
                 }}
               />
+              <MenuItem
+                icon="settings"
+                label="Settings"
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/settings");
+                }}
+              />
               <div className="border-t border-zinc-100 dark:border-zinc-800">
                 <MenuItem
                   icon="arrow-left"
