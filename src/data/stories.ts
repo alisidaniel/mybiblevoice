@@ -1,0 +1,156 @@
+import type { Story } from "../types";
+
+export const allStories: Story[] = [
+  {
+    id: "s_storm",
+    title: "Jesus Calms the Storm",
+    reference: "Mark 4:35-41",
+    summary:
+      "When a furious squall threatened to sink the disciples' boat, Jesus spoke three words: 'Peace. Be still.'",
+    body: [
+      "That day, when evening had come, Jesus said to his disciples, 'Let us go across to the other side.' And leaving the crowd, they took him with them in the boat, just as he was. And other boats were with him.",
+      "And a great windstorm arose, and the waves were breaking into the boat, so that the boat was already filling. But he was in the stern, asleep on the cushion.",
+      "And they woke him and said to him, 'Teacher, do you not care that we are perishing?' And he awoke and rebuked the wind and said to the sea, 'Peace! Be still!' And the wind ceased, and there was a great calm.",
+      "He said to them, 'Why are you so afraid? Have you still no faith?' And they were filled with great fear and said to one another, 'Who then is this, that even the wind and the sea obey him?'",
+    ],
+    readTimeMinutes: 4,
+    testament: "NT",
+    gradientClass: "from-[#2A2A2E] to-[#131316]",
+    icon: "waves",
+    tags: ["faith", "peace", "miracles"],
+  },
+  {
+    id: "s_david",
+    title: "David & Goliath",
+    reference: "1 Samuel 17",
+    summary:
+      "A shepherd boy with five smooth stones faced a giant who had terrified an entire army.",
+    body: [
+      "Now the Philistines gathered their armies for battle. And there came out from the camp of the Philistines a champion named Goliath of Gath, whose height was six cubits and a span.",
+      "He stood and shouted to the ranks of Israel, 'Choose a man for yourselves, and let him come down to me.' When Saul and all Israel heard these words of the Philistine, they were dismayed and greatly afraid.",
+      "And David said to Saul, 'Let no man's heart fail because of him. Your servant will go and fight with this Philistine.'",
+      "Then David said to the Philistine, 'You come to me with a sword and with a spear and with a javelin, but I come to you in the name of the Lord of hosts.' And David put his hand in his bag and took out a stone and slung it and struck the Philistine on his forehead.",
+    ],
+    readTimeMinutes: 6,
+    testament: "OT",
+    gradientClass: "from-[#3A3A3E] to-[#1C1C1F]",
+    icon: "star",
+    tags: ["courage", "faith", "victory"],
+  },
+  {
+    id: "s_daniel",
+    title: "Daniel in the Den",
+    reference: "Daniel 6",
+    summary:
+      "A faithful servant of God was thrown to the lions for praying — and emerged without a scratch.",
+    body: [
+      "It pleased Darius to set over the kingdom 120 satraps, and over them three high officials, of whom Daniel was one. Then this Daniel became distinguished above all the other high officials, because an excellent spirit was in him.",
+      "Then these men said, 'We shall not find any ground for complaint against this Daniel unless we find it in connection with the law of his God.'",
+      "Then they came by agreement to the king and said, 'O King Darius, establish an ordinance that whoever makes petition to any god or man for thirty days, except to you, O king, shall be cast into the den of lions.'",
+      "Then Daniel went to his house and got down on his knees three times a day and prayed and gave thanks before his God. Then these men found Daniel making petition and plea before his God.",
+      "And the king commanded, and Daniel was brought and cast into the den of lions. And a stone was brought and laid on the mouth of the den. Then the king went to his palace and spent the night fasting.",
+      "At break of day, the king arose and went in haste to the den of lions. And Daniel said to the king, 'O king, live forever! My God sent his angel and shut the lions' mouths, and they have not harmed me.'",
+    ],
+    readTimeMinutes: 5,
+    testament: "OT",
+    gradientClass: "from-[#4A4A4E] to-[#242427]",
+    icon: "shield",
+    tags: ["trust", "prayer", "faithfulness"],
+  },
+  {
+    id: "s_creation",
+    title: "The Creation",
+    reference: "Genesis 1-2",
+    summary:
+      "In the beginning, God spoke light, land, life, and humanity into being — and called it very good.",
+    body: [
+      "In the beginning, God created the heavens and the earth. The earth was without form and void, and darkness was over the face of the deep.",
+      "And God said, 'Let there be light,' and there was light. And God saw that the light was good.",
+      "And God said, 'Let there be an expanse in the midst of the waters,' and it was so. And God called the expanse Heaven.",
+      "And God said, 'Let the waters under the heavens be gathered together into one place, and let the dry land appear.' And it was so.",
+      "Then God said, 'Let us make man in our image, after our likeness.' So God created man in his own image, in the image of God he created him; male and female he created them.",
+      "And God saw everything that he had made, and behold, it was very good.",
+    ],
+    readTimeMinutes: 7,
+    testament: "OT",
+    gradientClass: "from-[#3E3E42] to-[#1A1A1D]",
+    icon: "crown",
+    tags: ["creation", "beginnings", "identity"],
+  },
+  {
+    id: "s_prodigal",
+    title: "The Prodigal Son",
+    reference: "Luke 15:11-32",
+    summary:
+      "A son who abandoned his father returned expecting punishment — and was met with a robe, a ring, and a feast.",
+    body: [
+      "And he said, 'There was a man who had two sons. And the younger of them said to his father, Father, give me the share of property that is coming to me.' And he divided his property between them.",
+      "Not many days later, the younger son gathered all he had and took a journey into a far country, and there he squandered his property in reckless living.",
+      "But when he came to himself, he said, 'I will arise and go to my father, and I will say to him, Father, I have sinned against heaven and before you.'",
+      "But while he was still a long way off, his father saw him and felt compassion, and ran and embraced him and kissed him.",
+      "And the father said to his servants, 'Bring quickly the best robe, and put it on him, and put a ring on his hand, and shoes on his feet. And bring the fattened calf and kill it, and let us eat and celebrate. For this my son was dead, and is alive again.'",
+    ],
+    readTimeMinutes: 5,
+    testament: "NT",
+    gradientClass: "from-[#343438] to-[#17171A]",
+    icon: "heart",
+    tags: ["grace", "forgiveness", "redemption"],
+  },
+  {
+    id: "s_creation_fall",
+    title: "The Fall",
+    reference: "Genesis 3",
+    summary:
+      "Doubt entered the garden, and with it came a choice that would echo through every generation.",
+    body: [
+      "Now the serpent was more crafty than any other beast of the field that the Lord God had made. He said to the woman, 'Did God actually say, You shall not eat of any tree in the garden?'",
+      "So when the woman saw that the tree was good for food, and that it was a delight to the eyes, and that the tree was to be desired to make one wise, she took of its fruit and ate.",
+      "Then the eyes of both were opened, and they knew that they were naked. And they hid themselves from the presence of the Lord God among the trees of the garden.",
+      "But the Lord God called to the man and said to him, 'Where are you?' And he said, 'I heard the sound of you in the garden, and I was afraid, because I was naked, and I hid myself.'",
+    ],
+    readTimeMinutes: 4,
+    testament: "OT",
+    gradientClass: "from-[#2E2E32] to-[#151518]",
+    icon: "flame",
+    tags: ["sin", "consequence", "mercy"],
+  },
+  {
+    id: "s_esther",
+    title: "Esther's Courage",
+    reference: "Esther 4-9",
+    summary:
+      "A queen risked her life to save her people, saying, 'If I perish, I perish.'",
+    body: [
+      "When Mordecai learned all that had been done, he tore his clothes and put on sackcloth and ashes, and went out into the midst of the city, crying out with a loud and bitter cry.",
+      "And Mordecai told them to reply to Esther, 'Do not think to yourself that in the king's palace you will escape any more than all the other Jews.'",
+      "And who knows whether you have not come to the kingdom for such a time as this?'",
+      "Then Esther told them to reply to Mordecai, 'Go, gather all the Jews to be found in Susa, and hold a fast on my behalf. Then I will go to the king, though it is against the law, and if I perish, I perish.'",
+    ],
+    readTimeMinutes: 6,
+    testament: "OT",
+    gradientClass: "from-[#3A3A3E] to-[#1C1C1F]",
+    icon: "crown",
+    tags: ["courage", "purpose", "faith"],
+  },
+  {
+    id: "s_resurrection",
+    title: "The Resurrection",
+    reference: "John 20",
+    summary:
+      "On the first day of the week, the tomb was empty — and everything changed.",
+    body: [
+      "Now on the first day of the week Mary Magdalene came to the tomb early, while it was still dark, and saw that the stone had been taken away from the tomb.",
+      "So she ran and went to Simon Peter and the other disciple, the one whom Jesus loved, and said to them, 'They have taken the Lord out of the tomb, and we do not know where they have laid him.'",
+      "Then the other disciple, who had reached the tomb first, also went in, and he saw and believed.",
+      "But Mary stood weeping outside the tomb, and as she wept she stooped to look into the tomb. She turned around and saw Jesus standing, but she did not know that it was Jesus.",
+      "Jesus said to her, 'Mary.' She turned and said to him in Aramaic, 'Rabboni!' (which means Teacher).",
+    ],
+    readTimeMinutes: 5,
+    testament: "NT",
+    gradientClass: "from-[#404044] to-[#1F1F22]",
+    icon: "star",
+    tags: ["resurrection", "hope", "victory"],
+  },
+];
+
+export const relatedStories = allStories.slice(0, 3);

@@ -1,122 +1,87 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { AppProvider, useApp } from "./context/AppContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AppLayout } from "./components/layout/AppLayout";
 
-function App() {
-  const [count, setCount] = useState(0)
+import DailyFeed from "./pages/DailyFeed";
+import StoryExplorer from "./pages/StoryExplorer";
+import StoryDetail from "./pages/StoryDetail";
+import Journal from "./pages/Journal";
+import Topics from "./pages/Topics";
+import Saved from "./pages/Saved";
+import Week from "./pages/Week";
+import WeekLetter from "./pages/WeekLetter";
+import Profile from "./pages/Profile";
+import Onboarding from "./pages/Onboarding";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import NotFound from "./pages/NotFound";
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+function RequireAuth({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, loading } = useAuth();
+  const location = useLocation();
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+  if (loading) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-[#FAFAFA] text-zinc-400 dark:bg-zinc-950">
+        Loading…
+      </div>
+    );
+  }
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+  return <>{children}</>;
 }
 
-export default App
+function OnboardingGate() {
+  const { hasOnboarded } = useApp();
+  if (!hasOnboarded) return <Navigate to="/onboarding" replace />;
+  return <AppLayout />;
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* public */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
+            {/* onboarding — auth required, no app shell */}
+            <Route
+              path="/onboarding"
+              element={
+                <RequireAuth>
+                  <Onboarding />
+                </RequireAuth>
+              }
+            />
+
+            {/* app — auth + onboarded */}
+            <Route
+              element={
+                <RequireAuth>
+                  <OnboardingGate />
+                </RequireAuth>
+              }
+            >
+              <Route path="/" element={<DailyFeed />} />
+              <Route path="/week" element={<Week />} />
+              <Route path="/week/letter" element={<WeekLetter />} />
+              <Route path="/stories" element={<StoryExplorer />} />
+              <Route path="/stories/:id" element={<StoryDetail />} />
+              <Route path="/journal" element={<Journal />} />
+              <Route path="/topics" element={<Topics />} />
+              <Route path="/saved" element={<Saved />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AppProvider>
+    </AuthProvider>
+  );
+}
