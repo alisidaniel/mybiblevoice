@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNotifications } from "../hooks/useNotifications";
 import { useTheme } from "../hooks/useTheme";
+import { useStreak } from "../hooks/useStreak";
 import { useApp } from "../context/AppContext";
 import { Icon } from "../components/ui/Icon";
+import { VoicePicker } from "../components/settings/VoicePicker";
 import {
   downloadBlob,
   downloadString,
@@ -13,15 +15,12 @@ import {
   type ExportPayload,
 } from "../services/export";
 
-import { notifications } from "../services/notifications";
-
-await notifications.fire("Test notification", "This is a mock push.");
-
 export default function Settings() {
   const { user, savedVerses, journal, resetAll } = useApp();
   const { items, permission, requestPermission, markAllRead, dismiss } =
     useNotifications();
   const { theme, setTheme } = useTheme();
+  const streak = useStreak();
   const [exporting, setExporting] = useState<"pdf" | "md" | "json" | null>(null);
 
   const payload = (): ExportPayload => ({
@@ -61,11 +60,39 @@ export default function Settings() {
           Settings
         </h1>
         <p className="mt-1.5 text-[13px] text-zinc-400">
-          Notifications, appearance, and export
+          Notifications, reading voice, appearance, and export
         </p>
       </div>
 
-      {/* Notifications */}
+      {/* ─── STREAK ─────────────────────────────────────────────── */}
+      <Section
+        title="Streak"
+        action={
+          streak.count > 0 ? (
+            <button
+              onClick={() => {
+                if (window.confirm("Reset your streak? This cannot be undone.")) {
+                  streak.resetStreak();
+                }
+              }}
+              className="text-[12px] font-medium text-zinc-400 hover:text-red-600"
+            >
+              Reset
+            </button>
+          ) : undefined
+        }
+      >
+        <div className="grid grid-cols-3 gap-4">
+          <StatBox label="Current" value={streak.count} />
+          <StatBox label="Longest" value={streak.longestStreak} />
+          <StatBox label="Total days" value={streak.totalActiveDays} />
+        </div>
+        <p className="mt-3 text-[12.5px] text-zinc-500 dark:text-zinc-400">
+          {streak.label}
+        </p>
+      </Section>
+
+      {/* ─── NOTIFICATIONS ──────────────────────────────────────── */}
       <Section
         title="Notifications"
         action={
@@ -134,7 +161,12 @@ export default function Settings() {
         )}
       </Section>
 
-      {/* Appearance */}
+      {/* ─── VOICE ──────────────────────────────────────────────── */}
+      <Section title="Reading voice">
+        <VoicePicker />
+      </Section>
+
+      {/* ─── APPEARANCE ─────────────────────────────────────────── */}
       <Section title="Appearance">
         <div className="flex gap-2">
           {(["light", "dark"] as const).map((t) => (
@@ -153,7 +185,7 @@ export default function Settings() {
         </div>
       </Section>
 
-      {/* Export */}
+      {/* ─── EXPORT ─────────────────────────────────────────────── */}
       <Section title="Export your data">
         <p className="mb-4 text-[13px] text-zinc-500 dark:text-zinc-400">
           Download your saved verses and journal entries. Nothing leaves your
@@ -181,17 +213,17 @@ export default function Settings() {
         </div>
       </Section>
 
-      {/* Danger zone */}
+      {/* ─── RESET ──────────────────────────────────────────────── */}
       <Section title="Reset">
         <p className="mb-4 text-[13px] text-zinc-500 dark:text-zinc-400">
-          Clears saved verses, journal entries, preferences, and onboarding
-          state. This cannot be undone.
+          Clears saved verses, journal entries, stories, plan progress,
+          streak, and preferences. This cannot be undone.
         </p>
         <button
           onClick={() => {
             if (
               window.confirm(
-                "Reset all local data? This clears your saved verses, journal, and preferences."
+                "Reset all local data? This clears everything."
               )
             ) {
               resetAll();
@@ -224,6 +256,19 @@ function Section({
         {action}
       </div>
       {children}
+    </div>
+  );
+}
+
+function StatBox({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-lg border border-zinc-200 p-3 text-center dark:border-zinc-800">
+      <div className="font-serif text-[22px] leading-none tracking-tight text-zinc-900 dark:text-zinc-100">
+        {value}
+      </div>
+      <div className="mt-1 text-[10.5px] font-semibold uppercase tracking-wider text-zinc-400">
+        {label}
+      </div>
     </div>
   );
 }

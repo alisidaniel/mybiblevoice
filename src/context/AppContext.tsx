@@ -11,6 +11,7 @@ import type {
   JournalEntry,
   OnboardingPreferences,
   PlanProgress,
+  StreakState,
   Topic,
   User,
   Verse,
@@ -20,6 +21,8 @@ import { savedVerses as seedSaved } from "../data/verses";
 import { userTopics as seedTopics } from "../data/topics";
 import { journalEntries as seedJournal } from "../data/journal";
 import { storage } from "../services/storage";
+import { emptyStreak, recordActivity as computeNextStreak } from "../services/streak";
+import type { CommunityPick } from "../data/community";
 
 interface AppContextValue {
   user: User;
@@ -30,6 +33,8 @@ interface AppContextValue {
   preferences: OnboardingPreferences | null;
   hasOnboarded: boolean;
   planProgress: PlanProgress[];
+  streak: StreakState;
+  userPicks: CommunityPick[];
 
   toggleTopic: (id: string) => void;
   addTopic: (label: string) => void;
@@ -45,6 +50,10 @@ interface AppContextValue {
   completePlanDay: (planId: string, day: number) => void;
   resetPlan: (planId: string) => void;
   getPlanProgress: (planId: string) => PlanProgress | null;
+  recordActivity: () => void;
+  resetStreak: () => void;
+  createPick: (content: string, reference: string, topic: string) => CommunityPick;
+  deletePick: (id: string) => void;
   resetAll: () => void;
 }
 
@@ -61,7 +70,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     useState<OnboardingPreferences | null>(null);
   const [hasOnboarded, setHasOnboarded] = useState(false);
   const [planProgress, setPlanProgress] = useState<PlanProgress[]>([]);
+  const [streak, setStreak] = useState<StreakState>(emptyStreak);
+  const [userPicks, setUserPicks] = useState<CommunityPick[]>([]);
 
+  // ── hydrate ─────────────────────────────────────────────────────
   useEffect(() => {
     setTopics(storage.get("topics", seedTopics));
     setSavedVerses(storage.get("savedVerses", seedSaved));
@@ -70,9 +82,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPreferences(storage.get<OnboardingPreferences | null>("preferences", null));
     setHasOnboarded(storage.get("hasOnboarded", false));
     setPlanProgress(storage.get<PlanProgress[]>("planProgress", []));
+    setStreak(storage.get<StreakState>("streak", emptyStreak));
+    setUserPicks(storage.get<CommunityPick[]>("userPicks", []));
     setHydrated(true);
   }, []);
 
+  // ── persist ─────────────────────────────────────────────────────
   useEffect(() => { if (hydrated) storage.set("topics", topics); }, [topics, hydrated]);
   useEffect(() => { if (hydrated) storage.set("savedVerses", savedVerses); }, [savedVerses, hydrated]);
   useEffect(() => { if (hydrated) storage.set("savedStories", savedStories); }, [savedStories, hydrated]);
@@ -80,7 +95,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) storage.set("preferences", preferences); }, [preferences, hydrated]);
   useEffect(() => { if (hydrated) storage.set("hasOnboarded", hasOnboarded); }, [hasOnboarded, hydrated]);
   useEffect(() => { if (hydrated) storage.set("planProgress", planProgress); }, [planProgress, hydrated]);
+  useEffect(() => { if (hydrated) storage.set("streak", streak); }, [streak, hydrated]);
+  useEffect(() => { if (hydrated) storage.set("userPicks", userPicks); }, [userPicks, hydrated]);
 
+  // ── topics ──────────────────────────────────────────────────────
   const toggleTopic = useCallback((id: string) => {
     setTopics((prev) =>
       prev.map((t) => (t.id === id ? { ...t, active: !t.active } : t))
@@ -96,10 +114,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  // ── verses ──────────────────────────────────────────────────────
   const saveVerse = useCallback((verse: Verse) => {
     setSavedVerses((prev) =>
       prev.some((v) => v.id === verse.id) ? prev : [verse, ...prev]
     );
+    setStreak((s) => computeNextStreak(s));
   }, []);
 
   const unsaveVerse = useCallback((id: string) => {
@@ -111,8 +131,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [savedVerses]
   );
 
+  // ── stories ─────────────────────────────────────────────────────
   const saveStory = useCallback((id: string) => {
     setSavedStories((prev) => (prev.includes(id) ? prev : [id, ...prev]));
+    setStreak((s) => computeNextStreak(s));
   }, []);
 
   const unsaveStory = useCallback((id: string) => {
@@ -124,16 +146,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [savedStories]
   );
 
+  // ── journal ─────────────────────────────────────────────────────
   const addJournalEntry = useCallback((entry: Omit<JournalEntry, "id">) => {
     const id = `j_${Date.now()}`;
     setJournal((prev) => [{ id, ...entry }, ...prev]);
+    setStreak((s) => computeNextStreak(s));
   }, []);
 
+  // ── onboarding ──────────────────────────────────────────────────
   const completeOnboarding = useCallback((prefs: OnboardingPreferences) => {
     setPreferences(prefs);
     setHasOnboarded(true);
+    setStreak((s) => computeNextStreak(s));
   }, []);
 
+  // ── plans ───────────────────────────────────────────────────────
   const startPlan = useCallback((planId: string) => {
     setPlanProgress((prev) => {
       if (prev.some((p) => p.planId === planId)) return prev;
@@ -171,6 +198,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           : p
       );
     });
+    setStreak((s) => computeNextStreak(s));
   }, []);
 
   const resetPlan = useCallback((planId: string) => {
@@ -182,6 +210,41 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [planProgress]
   );
 
+  // ── streak ──────────────────────────────────────────────────────
+  const recordActivity = useCallback(() => {
+    setStreak((s) => computeNextStreak(s));
+  }, []);
+
+  const resetStreak = useCallback(() => {
+    setStreak(emptyStreak);
+  }, []);
+
+  // ── community ───────────────────────────────────────────────────
+  const createPick = useCallback(
+    (content: string, reference: string, topic: string): CommunityPick => {
+      const pick: CommunityPick = {
+        id: `up_${Date.now()}`,
+        user: { initials: "S", name: "You", handle: "@you" },
+        type: "note",
+        content,
+        reference,
+        reactions: 0,
+        comments: 0,
+        postedAt: new Date().toISOString(),
+        topic,
+      };
+      setUserPicks((prev) => [pick, ...prev]);
+      setStreak((s) => computeNextStreak(s));
+      return pick;
+    },
+    []
+  );
+
+  const deletePick = useCallback((id: string) => {
+    setUserPicks((prev) => prev.filter((p) => p.id !== id));
+  }, []);
+
+  // ── reset all ───────────────────────────────────────────────────
   const resetAll = useCallback(() => {
     setTopics(seedTopics);
     setSavedVerses(seedSaved);
@@ -190,9 +253,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPreferences(null);
     setHasOnboarded(false);
     setPlanProgress([]);
-    ["topics", "savedVerses", "savedStories", "journal", "preferences", "hasOnboarded", "planProgress"].forEach((k) =>
-      storage.remove(k)
-    );
+    setStreak(emptyStreak);
+    setUserPicks([]);
+    [
+      "topics",
+      "savedVerses",
+      "savedStories",
+      "journal",
+      "preferences",
+      "hasOnboarded",
+      "planProgress",
+      "streak",
+      "userPicks",
+    ].forEach((k) => storage.remove(k));
   }, []);
 
   const value = useMemo<AppContextValue>(
@@ -205,6 +278,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       preferences,
       hasOnboarded,
       planProgress,
+      streak,
+      userPicks,
       toggleTopic,
       addTopic,
       saveVerse,
@@ -219,6 +294,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completePlanDay,
       resetPlan,
       getPlanProgress,
+      recordActivity,
+      resetStreak,
+      createPick,
+      deletePick,
       resetAll,
     }),
     [
@@ -229,6 +308,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       preferences,
       hasOnboarded,
       planProgress,
+      streak,
+      userPicks,
       toggleTopic,
       addTopic,
       saveVerse,
@@ -243,6 +324,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completePlanDay,
       resetPlan,
       getPlanProgress,
+      recordActivity,
+      resetStreak,
+      createPick,
+      deletePick,
       resetAll,
     ]
   );

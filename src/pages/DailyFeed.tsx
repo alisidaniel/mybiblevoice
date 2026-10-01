@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useApp } from "../context/AppContext";
 import { Greeting } from "../components/feed/Greeting";
 import { VerseCard } from "../components/feed/VerseCard";
@@ -24,13 +24,19 @@ function VerseSkeleton() {
 }
 
 export default function DailyFeed() {
-  const { user, isVerseSaved, saveVerse, unsaveVerse } = useApp();
+  const { user, isVerseSaved, saveVerse, unsaveVerse, recordActivity } = useApp();
   const { data, loading, error } = useVerse();
   const [amenActive, setAmenActive] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
 
   const saved = data ? isVerseSaved(data.verse.id) : false;
+
+  useEffect(() => {
+    if (!loading && data) {
+      recordActivity();
+    }
+  }, [loading, data, recordActivity]);
 
   return (
     <div className="flex flex-col gap-6">

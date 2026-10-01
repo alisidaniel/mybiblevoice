@@ -4,12 +4,21 @@ import { communityPicks } from "../data/community";
 import { commentsFor, type Comment } from "../data/comments";
 import { CommentList } from "../components/community/CommentList";
 import { Icon } from "../components/ui/Icon";
+import { useApp } from "../context/AppContext";
 import NotFound from "./NotFound";
 
 export default function CommunityDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const pick = communityPicks.find((p) => p.id === id);
+  const { userPicks, deletePick } = useApp();
+
+  const pick = useMemo(
+    () =>
+      [...userPicks, ...communityPicks].find((p) => p.id === id) ?? null,
+    [id, userPicks]
+  );
+
+  const isUserPick = userPicks.some((p) => p.id === id);
 
   const [thread, setThread] = useState<Comment[]>(() =>
     pick ? commentsFor(pick.id) : []
@@ -52,6 +61,19 @@ export default function CommunityDetail() {
         <Icon name="arrow-left" size={14} />
         Back
       </button>
+        {isUserPick && (
+          <button
+            onClick={() => {
+              if (window.confirm("Delete this pick?")) {
+                deletePick(pick.id);
+                navigate("/community");
+              }
+            }}
+            className="text-[12.5px] font-medium text-zinc-400 transition-colors hover:text-red-600"
+          >
+            Delete
+          </button>
+        )}
 
       {/* pick */}
       <article className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">

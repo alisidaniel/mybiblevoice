@@ -2,9 +2,20 @@ import { Icon } from "../ui/Icon";
 import { useApp } from "../../context/AppContext";
 import { prayerPrompt, readingList } from "../../data/readingProgress";
 import { CommunityPicks } from "../community/CommunityPicks";
+import { useStreak } from "../../hooks/useStreak";
 
 export function RightRail() {
-  const { user, topics } = useApp();
+  const { topics } = useApp();
+  const streak = useStreak();
+
+  const statusColor =
+    streak.status === "active"
+      ? "text-emerald-300"
+      : streak.status === "at-risk"
+        ? "text-amber-300"
+        : streak.status === "broken"
+          ? "text-rose-300"
+          : "text-white/50";
 
   return (
     <aside className="sticky top-[92px] hidden flex-col gap-3 lg:flex">
@@ -17,9 +28,16 @@ export function RightRail() {
           <Icon name="flame" size={14} className="text-white/70" />
         </div>
         <div className="font-serif text-[38px] leading-none tracking-tight">
-          {user.streak}
+          {streak.count}
         </div>
-        <div className="mt-1 text-[11.5px] text-white/50">days in the Word</div>
+        <div className={`mt-1 text-[11.5px] ${statusColor}`}>
+          {streak.label}
+        </div>
+        {streak.longestStreak > 0 && (
+          <div className="mt-3 border-t border-white/[0.08] pt-3 text-[11px] text-white/40">
+            Longest: {streak.longestStreak} · Total: {streak.totalActiveDays}
+          </div>
+        )}
       </div>
 
       {/* topics */}

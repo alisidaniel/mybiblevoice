@@ -90,3 +90,10 @@ export interface OnboardingPreferences {
   depth: number; // 0-100
   translation: string;
 }
+
+export interface StreakState {
+  count: number;
+  longestStreak: number;
+  totalActiveDays: number;
+  lastActiveDate: string | null; // YYYY-MM-DD
+}
