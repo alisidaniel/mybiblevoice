@@ -12,10 +12,10 @@ interface NavRow {
 const items: NavRow[] = [
   { path: "/", label: "Today", icon: "book" },
   { path: "/week", label: "This Week", icon: "calendar" },
+  { path: "/plans", label: "Reading Plans", icon: "book" },
   { path: "/saved", label: "Saved", icon: "bookmark", showCount: true },
   { path: "/stories", label: "Stories", icon: "library" },
   { path: "/journal", label: "Journal", icon: "journal" },
-  { path: "/week/letter", label: "Weekly Letter", icon: "journal" },
 ];
 
 export function Sidebar() {

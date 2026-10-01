@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Icon } from "../ui/Icon";
+import { useApp } from "../../context/AppContext";
 import type { Story } from "../../types";
 
 interface StoryCardProps {
@@ -8,11 +9,13 @@ interface StoryCardProps {
 
 export function StoryCard({ story }: StoryCardProps) {
   const navigate = useNavigate();
+  const { isStorySaved, saveStory, unsaveStory } = useApp();
+  const saved = isStorySaved(story.id);
 
   return (
     <article
       onClick={() => navigate(`/stories/${story.id}`)}
-      className="group cursor-pointer overflow-hidden rounded-xl border border-zinc-200 bg-white transition-all hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md"
+      className="group cursor-pointer overflow-hidden rounded-xl border border-zinc-200 bg-white transition-all hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
     >
       <div
         className={`relative grid h-28 place-items-center bg-gradient-to-br ${story.gradientClass}`}
@@ -21,12 +24,30 @@ export function StoryCard({ story }: StoryCardProps) {
         <span className="absolute right-3 top-3 rounded-full bg-black/30 px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm">
           {story.testament}
         </span>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            saved ? unsaveStory(story.id) : saveStory(story.id);
+          }}
+          title={saved ? "Remove bookmark" : "Bookmark this story"}
+          className={`absolute left-3 top-3 grid h-7 w-7 place-items-center rounded-full transition-all ${
+            saved
+              ? "bg-zinc-50 text-zinc-900"
+              : "bg-black/30 text-white/80 backdrop-blur-sm hover:bg-black/50 hover:text-white"
+          }`}
+        >
+          <Icon
+            name="bookmark"
+            size={12}
+            className={saved ? "fill-current" : ""}
+          />
+        </button>
       </div>
       <div className="p-4">
-        <h3 className="mb-1 text-[14px] font-semibold leading-snug tracking-tight text-zinc-900">
+        <h3 className="mb-1 text-[14px] font-semibold leading-snug tracking-tight text-zinc-900 dark:text-zinc-100">
           {story.title}
         </h3>
-        <p className="mb-3 line-clamp-2 text-[12.5px] leading-relaxed text-zinc-500">
+        <p className="mb-3 line-clamp-2 text-[12.5px] leading-relaxed text-zinc-500 dark:text-zinc-400">
           {story.summary}
         </p>
         <div className="flex items-center gap-1.5 text-[11.5px] text-zinc-400">

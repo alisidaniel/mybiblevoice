@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { communityPicks, type CommunityPick } from "../../data/community";
 import { Icon } from "../ui/Icon";
 
@@ -51,10 +52,16 @@ function PickCard({
   reacted: boolean;
   onReact: () => void;
 }) {
+  const navigate = useNavigate();
   const reactions = pick.reactions + (reacted ? 1 : 0);
 
+  const openDetail = () => navigate(`/community/${pick.id}`);
+
   return (
-    <article className="border-b border-zinc-100 pb-3 last:border-none last:pb-0 dark:border-zinc-800">
+    <article
+      onClick={openDetail}
+      className="cursor-pointer border-b border-zinc-100 pb-3 transition-colors last:border-none last:pb-0 hover:bg-zinc-50/50 dark:border-zinc-800 dark:hover:bg-zinc-800/40"
+    >
       <div className="mb-2 flex items-center gap-2">
         <span className="grid h-6 w-6 place-items-center rounded-full bg-zinc-200 text-[10px] font-bold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200">
           {pick.user.initials}
@@ -85,7 +92,10 @@ function PickCard({
 
       <div className="flex items-center gap-3 text-[11px] text-zinc-400">
         <button
-          onClick={onReact}
+          onClick={(e) => {
+            e.stopPropagation();
+            onReact();
+          }}
           className={`inline-flex items-center gap-1 transition-colors ${
             reacted
               ? "text-zinc-900 dark:text-zinc-100"
@@ -99,11 +109,19 @@ function PickCard({
           />
           {reactions}
         </button>
+
         <span className="inline-flex items-center gap-1">
           <Icon name="journal" size={11} />
           {pick.comments}
         </span>
-        <button className="ml-auto inline-flex items-center gap-1 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100">
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            // share action would go here
+          }}
+          className="ml-auto inline-flex items-center gap-1 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
+        >
           <Icon name="share" size={11} />
         </button>
       </div>

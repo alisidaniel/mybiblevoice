@@ -17,6 +17,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import CommunityDetail from "./pages/CommunityDetail";
+import ReadingPlans from "./pages/ReadingPlans";
+import PlanDetail from "./pages/PlanDetail";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
@@ -77,6 +80,9 @@ export default function App() {
               <Route path="/journal" element={<Journal />} />
               <Route path="/topics" element={<Topics />} />
               <Route path="/saved" element={<Saved />} />
+              <Route path="/community/:id" element={<CommunityDetail />} />
+              <Route path="/plans" element={<ReadingPlans />} />
+              <Route path="/plans/:id" element={<PlanDetail />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
