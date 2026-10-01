@@ -74,6 +74,13 @@ export interface JournalEntry {
   mood: "grateful" | "peaceful" | "seeking" | "heavy" | "hopeful";
 }
 
+export interface PlanProgress {
+  planId: string;
+  completedDays: number[];
+  startedAt: string; // ISO
+  lastReadAt: string; // ISO
+}
+
 export interface OnboardingPreferences {
   frequency: "daily" | "three-per-week" | "weekly";
   timeOfDay: "morning" | "midday" | "evening";
