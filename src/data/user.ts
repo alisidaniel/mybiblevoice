@@ -2,9 +2,9 @@ import type { User } from "../types";
 
 export const currentUser: User = {
   id: "u_001",
-  firstName: "Sarah",
-  lastName: "Mitchell",
+  firstName: "Gercia",
+  lastName: "Alisi",
   avatarInitials: "S",
-  email: "sarah@example.com",
+  email: "gercia@example.com",
   streak: 14,
 };
