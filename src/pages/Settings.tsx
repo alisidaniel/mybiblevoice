@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useTheme } from "../hooks/useTheme";
 import { useStreak } from "../hooks/useStreak";
 import { useApp } from "../context/AppContext";
-import { Icon } from "../components/ui/Icon";
 import { VoicePicker } from "../components/settings/VoicePicker";
 import { PushSettings } from "../components/settings/PushSettings";
 import { useTour } from "../hooks/useTour";
