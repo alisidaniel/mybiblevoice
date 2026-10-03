@@ -39,6 +39,7 @@ export default function CommunityDetail() {
       {
         id: `c_${Date.now()}`,
         pickId: pick.id,
+        parentId: null,
         author: { initials: "S", name: "You", handle: "@you" },
         body,
         postedAt: new Date().toISOString(),
