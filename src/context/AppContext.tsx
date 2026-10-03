@@ -121,7 +121,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setSavedVerses((prev) =>
       prev.some((v) => v.id === verse.id) ? prev : [verse, ...prev]
     );
-    setStreak((s) => computeNextStreak(s));
+    setStreak((s) => recordActivityFull(s).state);
   }, []);
 
   const unsaveVerse = useCallback((id: string) => {
@@ -136,7 +136,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // ── stories ─────────────────────────────────────────────────────
   const saveStory = useCallback((id: string) => {
     setSavedStories((prev) => (prev.includes(id) ? prev : [id, ...prev]));
-    setStreak((s) => computeNextStreak(s));
+    setStreak((s) => recordActivityFull(s).state);
   }, []);
 
   const unsaveStory = useCallback((id: string) => {
@@ -152,14 +152,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const addJournalEntry = useCallback((entry: Omit<JournalEntry, "id">) => {
     const id = `j_${Date.now()}`;
     setJournal((prev) => [{ id, ...entry }, ...prev]);
-    setStreak((s) => computeNextStreak(s));
+    setStreak((s) => recordActivityFull(s).state);
   }, []);
 
   // ── onboarding ──────────────────────────────────────────────────
   const completeOnboarding = useCallback((prefs: OnboardingPreferences) => {
     setPreferences(prefs);
     setHasOnboarded(true);
-    setStreak((s) => computeNextStreak(s));
+    setStreak((s) => recordActivityFull(s).state);
   }, []);
 
   // ── plans ───────────────────────────────────────────────────────
@@ -238,7 +238,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         topic,
       };
       setUserPicks((prev) => [pick, ...prev]);
-      setStreak((s) => computeNextStreak(s));
+      setStreak((s) => recordActivityFull(s).state);
       return pick;
     },
     []
