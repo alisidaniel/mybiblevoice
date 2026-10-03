@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useNotifications } from "../hooks/useNotifications";
 import { useTheme } from "../hooks/useTheme";
 import { useStreak } from "../hooks/useStreak";
 import { useApp } from "../context/AppContext";
 import { Icon } from "../components/ui/Icon";
 import { VoicePicker } from "../components/settings/VoicePicker";
+import { PushSettings } from "../components/settings/PushSettings";
 import { useTour } from "../hooks/useTour";
+import { LanguagePicker } from "../components/settings/LanguagePicker";
+import { useT } from "../i18n/I18nContext";
 import {
   downloadBlob,
   downloadString,
@@ -18,12 +20,11 @@ import {
 
 export default function Settings() {
   const { user, savedVerses, journal, resetAll } = useApp();
-  const { items, permission, requestPermission, markAllRead, dismiss } =
-    useNotifications();
   const { theme, setTheme } = useTheme();
   const tour = useTour();
   const streak = useStreak();
   const [exporting, setExporting] = useState<"pdf" | "md" | "json" | null>(null);
+  const t = useT();
 
   const payload = (): ExportPayload => ({
     user,
@@ -110,77 +111,16 @@ export default function Settings() {
       </Section>
 
       {/* ─── NOTIFICATIONS ──────────────────────────────────────── */}
-      <Section
-        title="Notifications"
-        action={
-          permission !== "granted" ? (
-            <button
-              onClick={requestPermission}
-              className="rounded-lg bg-zinc-900 px-3 py-1.5 text-[12px] font-medium text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900"
-            >
-              Enable
-            </button>
-          ) : (
-            <span className="rounded-full border border-zinc-200 px-2.5 py-1 text-[11px] font-medium text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-              Granted
-            </span>
-          )
-        }
-      >
-        {items.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-zinc-200 p-6 text-center text-[13px] text-zinc-400 dark:border-zinc-800">
-            No notifications scheduled.
-          </div>
-        ) : (
-          <>
-            <div className="mb-3 flex justify-end">
-              <button
-                onClick={markAllRead}
-                className="text-[12px] font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
-              >
-                Mark all read
-              </button>
-            </div>
-            <div className="flex flex-col gap-2">
-              {items.map((n) => (
-                <div
-                  key={n.id}
-                  className="flex items-start gap-3 rounded-lg border border-zinc-200 p-3 dark:border-zinc-800"
-                >
-                  <span
-                    className={`mt-1 h-2 w-2 shrink-0 rounded-full ${
-                      n.read
-                        ? "bg-zinc-200 dark:bg-zinc-700"
-                        : "bg-zinc-900 dark:bg-zinc-100"
-                    }`}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="text-[13px] font-medium text-zinc-900 dark:text-zinc-100">
-                      {n.title}
-                    </div>
-                    <div className="mt-0.5 text-[12.5px] text-zinc-500 dark:text-zinc-400">
-                      {n.body}
-                    </div>
-                    <div className="mt-1 text-[11px] text-zinc-400">
-                      {new Date(n.scheduledFor).toLocaleString()}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => dismiss(n.id)}
-                    className="grid h-7 w-7 place-items-center rounded-md text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800"
-                  >
-                    <Icon name="x" size={12} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
+      <Section title="Notifications">
+        <PushSettings />
       </Section>
-
       {/* ─── VOICE ──────────────────────────────────────────────── */}
       <Section title="Reading voice">
         <VoicePicker />
+      </Section>
+
+      <Section title={t("settings.language")}>
+        <LanguagePicker />
       </Section>
 
       {/* ─── APPEARANCE ─────────────────────────────────────────── */}

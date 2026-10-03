@@ -3,10 +3,13 @@ import { useApp } from "../../context/AppContext";
 import { prayerPrompt, readingList } from "../../data/readingProgress";
 import { CommunityPicks } from "../community/CommunityPicks";
 import { useStreak } from "../../hooks/useStreak";
+import { useT } from "../../i18n/I18nContext";
 
 export function RightRail() {
   const { topics } = useApp();
   const streak = useStreak();
+  const t = useT();
+  
 
   return (
     <aside className="sticky top-[92px] hidden flex-col gap-3 lg:flex">
@@ -17,7 +20,7 @@ export function RightRail() {
         >
         <div className="mb-3 flex items-center justify-between">
           <span className="text-[10.5px] font-semibold uppercase tracking-widest text-white/45">
-            Current streak
+             {t("rail.streak")}
           </span>
           <Icon name="flame" size={14} className="text-white/70" />
         </div>
@@ -43,7 +46,7 @@ export function RightRail() {
         {/* freeze pips */}
         <div className="mt-4 flex items-center gap-2 border-t border-white/[0.08] pt-3">
           <span className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
-            Freezes
+           {t("rail.freezes")}
           </span>
           <div className="ml-auto flex gap-1">
             {Array.from({ length: streak.freezeCap }).map((_, i) => (

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useApp } from "../context/AppContext";
 import { JournalEntry } from "../components/journal/JournalEntry";
 import { JournalCalendar } from "../components/journal/JournalCalendar";
+import { useOfflineQueue } from "../hooks/useOfflineQueue";
 import { dailyVerse } from "../data/verses";
 import { isoDate } from "../lib/date";
 
@@ -12,6 +13,7 @@ export default function Journal() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const [mood, setMood] = useState<(typeof moods)[number]>("peaceful");
+  const { enqueue, online } = useOfflineQueue();
 
   const filtered = useMemo(() => {
     const list = selectedDate
@@ -22,13 +24,20 @@ export default function Journal() {
 
   const submit = () => {
     if (!note.trim()) return;
-    addJournalEntry({
+    const entry = {
       date: isoDate(new Date()),
       verseReference: dailyVerse.reference,
       verseText: dailyVerse.text,
       note: note.trim(),
       mood,
-    });
+    };
+  
+    if (online) {
+      addJournalEntry(entry);
+    } else {
+      enqueue("journal:create", entry);
+    }
+  
     setNote("");
   };
 
@@ -83,6 +92,11 @@ export default function Journal() {
               </button>
             ))}
           </div>
+          {!online && (
+            <div className="mb-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11.5px] text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
+              You're offline — this entry will sync when you reconnect.
+            </div>
+          )}
           <button
             onClick={submit}
             disabled={!note.trim()}

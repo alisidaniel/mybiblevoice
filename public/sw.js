@@ -49,3 +49,39 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
+// Handle incoming push notifications
+self.addEventListener("push", (event) => {
+  let data = { title: "MyBibleVoice", body: "Your verse is ready." };
+  try {
+    if (event.data) data = event.data.json();
+  } catch {
+    /* fallback to default */
+  }
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: "/icons/icon-192.svg",
+      badge: "/icons/icon-192.svg",
+      data: data.data || {},
+      tag: data.tag || "mybiblevoice",
+    })
+  );
+});
+
+// Handle notification clicks
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = event.notification.data?.url || "/";
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((wins) => {
+      for (const w of wins) {
+        if (w.url.includes(self.location.origin) && "focus" in w) {
+          w.navigate(target);
+          return w.focus();
+        }
+      }
+      if (clients.openWindow) return clients.openWindow(target);
+    })
+  );
+});

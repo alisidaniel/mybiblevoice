@@ -3,6 +3,8 @@ import { AppProvider, useApp } from "./context/AppContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { AppLayout } from "./components/layout/AppLayout";
 import { InstallBanner } from "./components/pwa/InstallBanner";
+import { OfflineBadge } from "./components/ui/OfflineBadge";
+
 
 import DailyFeed from "./pages/DailyFeed";
 import StoryExplorer from "./pages/StoryExplorer";
@@ -95,6 +97,7 @@ export default function App() {
             </Route>
           </Routes>
           <InstallBanner />
+          <OfflineBadge />
         </BrowserRouter>
       </AppProvider>
     </AuthProvider>

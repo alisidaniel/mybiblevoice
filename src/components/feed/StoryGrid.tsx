@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Icon } from "../ui/Icon";
+import { StoryIllustration } from "../stories/StoryIllustration";
 import type { Story } from "../../types";
 
 interface StoryGridProps {
@@ -18,12 +18,12 @@ export function StoryGrid({
   return (
     <section>
       <div className="mb-3 flex items-center justify-between px-0.5">
-        <h2 className="text-sm font-semibold tracking-tight text-zinc-900">
+        <h2 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
           {title}
         </h2>
         <button
           onClick={onSeeAll ?? (() => navigate("/stories"))}
-          className="text-[12.5px] font-medium text-zinc-400 transition-colors hover:text-zinc-900"
+          className="text-[12.5px] font-medium text-zinc-400 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
         >
           See all →
         </button>
@@ -34,15 +34,17 @@ export function StoryGrid({
           <article
             key={story.id}
             onClick={() => navigate(`/stories/${story.id}`)}
-            className="group cursor-pointer overflow-hidden rounded-xl border border-zinc-200 bg-white transition-all hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md"
+            className="group cursor-pointer overflow-hidden rounded-xl border border-zinc-200 bg-white transition-all hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
           >
-            <div
-              className={`grid h-20 place-items-center bg-gradient-to-br ${story.gradientClass}`}
-            >
-              <Icon name={story.icon} size={22} className="text-white/50" />
+            <div className="relative h-20 overflow-hidden">
+              <StoryIllustration
+                id={story.id}
+                icon={story.icon}
+                className="absolute inset-0 h-full w-full"
+              />
             </div>
             <div className="p-3">
-              <h3 className="mb-1.5 text-[13px] font-semibold leading-snug tracking-tight text-zinc-900">
+              <h3 className="mb-1.5 text-[13px] font-semibold leading-snug tracking-tight text-zinc-900 dark:text-zinc-100">
                 {story.title}
               </h3>
               <div className="flex items-center gap-1.5 text-[11.5px] text-zinc-400">
