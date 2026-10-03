@@ -30,11 +30,43 @@ export function RightRail() {
         <div className="font-serif text-[38px] leading-none tracking-tight">
           {streak.count}
         </div>
-        <div className={`mt-1 text-[11.5px] ${statusColor}`}>
+        <div
+          className={`mt-1 text-[11.5px] ${
+            streak.status === "active"
+              ? "text-emerald-300"
+              : streak.status === "at-risk"
+                ? "text-amber-300"
+                : streak.status === "frozen"
+                  ? "text-sky-300"
+                  : streak.status === "broken"
+                    ? "text-rose-300"
+                    : "text-white/50"
+          }`}
+        >
           {streak.label}
         </div>
+
+        {/* freeze pips */}
+        <div className="mt-4 flex items-center gap-2 border-t border-white/[0.08] pt-3">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
+            Freezes
+          </span>
+          <div className="ml-auto flex gap-1">
+            {Array.from({ length: streak.freezeCap }).map((_, i) => (
+              <span
+                key={i}
+                className={`h-2.5 w-2.5 rounded-full ${
+                  i < streak.freezesAvailable
+                    ? "bg-sky-300"
+                    : "bg-white/15"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
         {streak.longestStreak > 0 && (
-          <div className="mt-3 border-t border-white/[0.08] pt-3 text-[11px] text-white/40">
+          <div className="mt-2 text-[10.5px] text-white/40">
             Longest: {streak.longestStreak} · Total: {streak.totalActiveDays}
           </div>
         )}

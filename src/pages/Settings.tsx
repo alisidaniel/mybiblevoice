@@ -5,6 +5,7 @@ import { useStreak } from "../hooks/useStreak";
 import { useApp } from "../context/AppContext";
 import { Icon } from "../components/ui/Icon";
 import { VoicePicker } from "../components/settings/VoicePicker";
+import { useTour } from "../hooks/useTour";
 import {
   downloadBlob,
   downloadString,
@@ -20,6 +21,7 @@ export default function Settings() {
   const { items, permission, requestPermission, markAllRead, dismiss } =
     useNotifications();
   const { theme, setTheme } = useTheme();
+  const tour = useTour();
   const streak = useStreak();
   const [exporting, setExporting] = useState<"pdf" | "md" | "json" | null>(null);
 
@@ -63,6 +65,21 @@ export default function Settings() {
           Notifications, reading voice, appearance, and export
         </p>
       </div>
+
+      <Section title="Onboarding">
+        <p className="mb-4 text-[13px] text-zinc-500 dark:text-zinc-400">
+          Walk through the app tour again.
+        </p>
+        <button
+          onClick={() => {
+            tour.restart();
+            window.location.href = "/";
+          }}
+          className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-[13px] font-medium text-zinc-700 hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+        >
+          Replay tour
+        </button>
+      </Section>
 
       {/* ─── STREAK ─────────────────────────────────────────────── */}
       <Section

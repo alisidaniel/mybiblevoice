@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-route
 import { AppProvider, useApp } from "./context/AppContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { AppLayout } from "./components/layout/AppLayout";
+import { InstallBanner } from "./components/pwa/InstallBanner";
 
 import DailyFeed from "./pages/DailyFeed";
 import StoryExplorer from "./pages/StoryExplorer";
@@ -22,6 +23,7 @@ import ReadingPlans from "./pages/ReadingPlans";
 import PlanDetail from "./pages/PlanDetail";
 import Community from "./pages/Community";
 import NewPick from "./pages/NewPick";
+
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
@@ -92,6 +94,7 @@ export default function App() {
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
+          <InstallBanner />
         </BrowserRouter>
       </AppProvider>
     </AuthProvider>

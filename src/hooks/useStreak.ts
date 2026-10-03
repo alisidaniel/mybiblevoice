@@ -1,5 +1,5 @@
 import { useApp } from "../context/AppContext";
-import { streakLabel, streakStatus } from "../services/streak";
+import { streakLabel, streakStatus, FREEZE_CAP } from "../services/streak";
 
 export function useStreak() {
   const { streak, recordActivity, resetStreak } = useApp();
@@ -9,6 +9,7 @@ export function useStreak() {
     ...streak,
     status,
     label: streakLabel(status),
+    freezeCap: FREEZE_CAP,
     recordActivity,
     resetStreak,
   };

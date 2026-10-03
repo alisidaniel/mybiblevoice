@@ -97,3 +97,13 @@ export interface StreakState {
   totalActiveDays: number;
   lastActiveDate: string | null; // YYYY-MM-DD
 }
+
+export interface StreakState {
+  count: number;
+  longestStreak: number;
+  totalActiveDays: number;
+  lastActiveDate: string | null;
+  freezesAvailable: number;
+  freezesUsed: number;
+  lastFreezeEarnedAt: string | null;
+}

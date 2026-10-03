@@ -21,8 +21,9 @@ import { savedVerses as seedSaved } from "../data/verses";
 import { userTopics as seedTopics } from "../data/topics";
 import { journalEntries as seedJournal } from "../data/journal";
 import { storage } from "../services/storage";
-import { emptyStreak, recordActivity as computeNextStreak } from "../services/streak";
+import { emptyStreak, recordActivityFull, type RecordResult } from "../services/streak";
 import type { CommunityPick } from "../data/community";
+
 
 interface AppContextValue {
   user: User;
@@ -35,6 +36,7 @@ interface AppContextValue {
   planProgress: PlanProgress[];
   streak: StreakState;
   userPicks: CommunityPick[];
+  
 
   toggleTopic: (id: string) => void;
   addTopic: (label: string) => void;
@@ -198,7 +200,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           : p
       );
     });
-    setStreak((s) => computeNextStreak(s));
+    setStreak((s) => recordActivityFull(s).state);
   }, []);
 
   const resetPlan = useCallback((planId: string) => {
@@ -211,9 +213,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   // ── streak ──────────────────────────────────────────────────────
-  const recordActivity = useCallback(() => {
-    setStreak((s) => computeNextStreak(s));
-  }, []);
+  const recordActivity = useCallback((): RecordResult => {
+    const result = recordActivityFull(streak);
+    setStreak(result.state);
+    return result;
+  }, [streak]);
 
   const resetStreak = useCallback(() => {
     setStreak(emptyStreak);
