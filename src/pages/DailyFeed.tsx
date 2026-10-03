@@ -13,7 +13,6 @@ import { Toast, type ToastData } from "../components/ui/Toast";
 import { useTour } from "../hooks/useTour";
 import { TourOverlay } from "../components/tour/TourOverlay";
 
-
 function VerseSkeleton() {
   return (
     <div className="animate-pulse rounded-[20px] bg-gradient-to-br from-[#1A1A1D] to-[#050505] p-14 pb-8">
@@ -41,6 +40,25 @@ export default function DailyFeed() {
     }
   }, [loading, data, recordActivity]);
 
+  const handleSave = () => {
+    if (!data) return;
+    if (saved) {
+      unsaveVerse(data.verse.id);
+      setToast({
+        id: `t_${Date.now()}`,
+        title: "Removed",
+        body: "Verse removed from your saved list.",
+      });
+    } else {
+      saveVerse(data.verse);
+      setToast({
+        id: `t_${Date.now()}`,
+        title: "Saved",
+        body: "Verse added to your collection.",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Greeting
@@ -59,19 +77,25 @@ export default function DailyFeed() {
 
       {!loading && data && (
         <>
-          <VerseCard
-            verse={data.verse}
-            amenActive={amenActive}
-            savedActive={saved}
-            onAmen={() => setAmenActive((v) => !v)}
-            onSave={() =>
-              saved ? unsaveVerse(data.verse.id) : saveVerse(data.verse)
-            }
-            onListen={() => console.log("listen")}
-            onShare={() => console.log("share")}
-          />
+          <div data-tour="verse-card">
+            <VerseCard
+              verse={data.verse}
+              amenActive={amenActive}
+              savedActive={saved}
+              onAmen={() => setAmenActive((v) => !v)}
+              onSave={handleSave}
+              onShare={() => {
+                setToast({
+                  id: `t_${Date.now()}`,
+                  title: "Shared",
+                  body: "Link copied to clipboard.",
+                });
+              }}
+            />
+          </div>
 
           <button
+            data-tour="ask-ai"
             onClick={() => setChatOpen(true)}
             className="group flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4 text-left shadow-sm transition-all hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900"
           >
@@ -95,7 +119,9 @@ export default function DailyFeed() {
             />
           </button>
 
-          <WhyCard reason={data.why} />
+          <div data-tour="why-card">
+            <WhyCard reason={data.why} />
+          </div>
 
           <AIChatPanel
             verse={data.verse}
@@ -104,20 +130,21 @@ export default function DailyFeed() {
           />
         </>
       )}
+
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       <StoryGrid stories={relatedStories} />
-      
+
       {tour.active && tour.currentStep && (
-          <TourOverlay
-            step={tour.currentStep}
-            stepIndex={tour.stepIndex}
-            totalSteps={tour.totalSteps}
-            onNext={tour.next}
-            onPrev={tour.prev}
-            onSkip={tour.skip}
-          />
-        )}
+        <TourOverlay
+          step={tour.currentStep}
+          stepIndex={tour.stepIndex}
+          totalSteps={tour.totalSteps}
+          onNext={tour.next}
+          onPrev={tour.prev}
+          onSkip={tour.skip}
+        />
+      )}
     </div>
   );
 }

@@ -8,19 +8,13 @@ export function RightRail() {
   const { topics } = useApp();
   const streak = useStreak();
 
-  const statusColor =
-    streak.status === "active"
-      ? "text-emerald-300"
-      : streak.status === "at-risk"
-        ? "text-amber-300"
-        : streak.status === "broken"
-          ? "text-rose-300"
-          : "text-white/50";
-
   return (
     <aside className="sticky top-[92px] hidden flex-col gap-3 lg:flex">
       {/* streak */}
-      <div className="rounded-xl border border-zinc-800 bg-gradient-to-b from-zinc-900 to-black p-4 text-zinc-50">
+      <div
+          data-tour="streak-card"
+          className="rounded-xl border border-zinc-800 bg-gradient-to-b from-zinc-900 to-black p-4 text-zinc-50"
+        >
         <div className="mb-3 flex items-center justify-between">
           <span className="text-[10.5px] font-semibold uppercase tracking-widest text-white/45">
             Current streak
