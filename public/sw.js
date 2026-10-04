@@ -1,4 +1,4 @@
-const CACHE = "mybiblevoice-v1";
+const CACHE = "mybiblevoice-v2";
 const PRECACHE = ["/", "/index.html", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
