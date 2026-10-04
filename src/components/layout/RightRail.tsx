@@ -71,7 +71,7 @@ export function StreakCard() {
   );
 }
 
-export function RightRailContent() {
+export function RightRailContent({ onNavigate }: { onNavigate?: () => void } = {}) {
   const { topics } = useApp();
 
   return (
@@ -130,7 +130,7 @@ export function RightRailContent() {
         ))}
       </div>
 
-      <CommunityPicks />
+      <CommunityPicks  onNavigate={onNavigate} />
     </div>
   );
 }

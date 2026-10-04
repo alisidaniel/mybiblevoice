@@ -103,7 +103,7 @@ export function MobileDrawer({ open, onClose }: Props) {
 
           {/* rail content */}
           <div className="mt-6">
-            <RightRailContent />
+            <RightRailContent onNavigate={onClose} />
           </div>
         </div>
       </div>

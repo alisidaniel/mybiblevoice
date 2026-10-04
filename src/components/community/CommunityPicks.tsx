@@ -16,12 +16,22 @@ function timeAgo(iso: string) {
 interface Props {
   limit?: number;
   showComposer?: boolean;
+  onNavigate?: () => void;
 }
 
-export function CommunityPicks({ limit = 4, showComposer = true }: Props) {
+export function CommunityPicks({
+  limit = 4,
+  showComposer = true,
+  onNavigate,
+}: Props) {
   const { userPicks } = useApp();
   const navigate = useNavigate();
   const [reacted, setReacted] = useState<Record<string, boolean>>({});
+
+  const go = (path: string) => {
+    onNavigate?.();
+    navigate(path);
+  };
 
   const allPicks = useMemo<CommunityPick[]>(
     () =>
@@ -37,7 +47,7 @@ export function CommunityPicks({ limit = 4, showComposer = true }: Props) {
     <div className="flex flex-col gap-3">
       {showComposer && (
         <button
-          onClick={() => navigate("/community/new")}
+          onClick={() => go("/community/new")}
           className="flex w-full items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3 text-left transition-all hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
         >
           <span className="grid h-7 w-7 place-items-center rounded-full bg-zinc-900 text-[11px] font-bold text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900">
@@ -56,7 +66,7 @@ export function CommunityPicks({ limit = 4, showComposer = true }: Props) {
             Community picks
           </div>
           <button
-            onClick={() => navigate("/community")}
+            onClick={() => go("/community")}
             className="text-[10.5px] font-medium text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
           >
             See all →
@@ -72,6 +82,7 @@ export function CommunityPicks({ limit = 4, showComposer = true }: Props) {
               onReact={() =>
                 setReacted((r) => ({ ...r, [pick.id]: !r[pick.id] }))
               }
+              onOpen={() => go(`/community/${pick.id}`)}
             />
           ))}
         </div>
@@ -84,17 +95,18 @@ function PickCard({
   pick,
   reacted,
   onReact,
+  onOpen,
 }: {
   pick: CommunityPick;
   reacted: boolean;
   onReact: () => void;
+  onOpen: () => void;
 }) {
-  const navigate = useNavigate();
   const reactions = pick.reactions + (reacted ? 1 : 0);
 
   return (
     <article
-      onClick={() => navigate(`/community/${pick.id}`)}
+      onClick={onOpen}
       className="cursor-pointer border-b border-zinc-100 pb-3 transition-colors last:border-none last:pb-0 hover:bg-zinc-50/50 dark:border-zinc-800 dark:hover:bg-zinc-800/40"
     >
       <div className="mb-2 flex items-center gap-2">
