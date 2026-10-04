@@ -13,7 +13,7 @@ export function AppLayout() {
   const location = useLocation();
 
   useEffect(() => {
-    // setDrawerOpen(false);
+    setDrawerOpen(false);
   }, [location.pathname]);
 
   return (
