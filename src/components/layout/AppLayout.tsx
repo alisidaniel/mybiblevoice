@@ -12,9 +12,9 @@ export function AppLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    setDrawerOpen(false);
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   setDrawerOpen(false);
+  // }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
