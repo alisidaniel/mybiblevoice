@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
 import { RightRail } from "./RightRail";
@@ -10,6 +10,11 @@ import { useApp } from "../../context/AppContext";
 export function AppLayout() {
   const { user } = useApp();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setDrawerOpen(false);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
