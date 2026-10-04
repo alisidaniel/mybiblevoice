@@ -5,14 +5,13 @@ import { CommunityPicks } from "../community/CommunityPicks";
 import { useStreak } from "../../hooks/useStreak";
 import { useT } from "../../i18n/I18nContext";
 
-export function RightRail() {
-  const { topics } = useApp();
+export function StreakCard() {
   const streak = useStreak();
   const t = useT();
   
 
   return (
-    <aside className="sticky top-[92px] hidden flex-col gap-3 lg:flex">
+    <div className="sticky top-[92px] hidden flex-col gap-3 lg:flex">
       {/* streak */}
       <div
           data-tour="streak-card"
@@ -68,8 +67,17 @@ export function RightRail() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
 
-      {/* topics */}
+export function RightRailContent() {
+  const { topics } = useApp();
+
+  return (
+    <div className="flex flex-col gap-3">
+      <StreakCard />
+
       <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div className="mb-3 text-[10.5px] font-semibold uppercase tracking-widest text-zinc-400">
           Your topics
@@ -90,7 +98,6 @@ export function RightRail() {
         </div>
       </div>
 
-      {/* prayer */}
       <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div className="mb-3 text-[10.5px] font-semibold uppercase tracking-widest text-zinc-400">
           Prayer prompt
@@ -100,7 +107,6 @@ export function RightRail() {
         </p>
       </div>
 
-      {/* reading */}
       <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div className="mb-3 text-[10.5px] font-semibold uppercase tracking-widest text-zinc-400">
           Continue reading
@@ -124,8 +130,16 @@ export function RightRail() {
         ))}
       </div>
 
-      {/* community */}
       <CommunityPicks />
+    </div>
+  );
+}
+
+
+export function RightRail() {
+  return (
+    <aside className="sticky top-[92px] hidden flex-col gap-3 lg:flex">
+      <RightRailContent />
     </aside>
   );
 }

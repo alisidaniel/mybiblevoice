@@ -5,6 +5,7 @@ import { IconButton } from "../ui/IconButton";
 import { Avatar } from "../ui/Avatar";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import { useAuth } from "../../context/AuthContext";
+import { useStreak } from "../../hooks/useStreak";
 import type { User } from "../../types";
 
 const NAV_ITEMS = [
@@ -17,12 +18,14 @@ const NAV_ITEMS = [
 
 interface NavbarProps {
   user: User;
+  onMenuClick: () => void;
 }
 
-export function Navbar({ user }: NavbarProps) {
+export function Navbar({ user, onMenuClick }: NavbarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = useAuth();
+  const streak = useStreak();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -38,16 +41,40 @@ export function Navbar({ user }: NavbarProps) {
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
   return (
-    <nav className="sticky top-0 z-50 flex h-16 items-center gap-8 border-b border-zinc-200 bg-[rgba(250,250,250,0.8)] px-7 backdrop-blur-xl dark:border-zinc-800 dark:bg-[rgba(9,9,11,0.75)]">
-      <button onClick={() => navigate("/")} className="flex items-center gap-2.5">
+    <nav className="sticky top-0 z-50 flex h-16 items-center gap-3 border-b border-zinc-200 bg-[rgba(250,250,250,0.8)] px-4 backdrop-blur-xl sm:gap-8 sm:px-7 dark:border-zinc-800 dark:bg-[rgba(9,9,11,0.75)]">
+      {/* hamburger — mobile only */}
+      <button
+        onClick={onMenuClick}
+        aria-label="Open menu"
+        className="grid h-9 w-9 place-items-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 lg:hidden dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width={18}
+          height={18}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          strokeLinecap="round"
+        >
+          <path d="M3 6h18M3 12h18M3 18h18" />
+        </svg>
+      </button>
+
+      {/* logo */}
+      <button
+        onClick={() => navigate("/")}
+        className="flex items-center gap-2.5"
+      >
         <div className="grid h-7 w-7 place-items-center rounded-[7px] bg-zinc-900 text-[13px] font-bold text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900">
           M
         </div>
-        <span className="text-[15px] font-semibold tracking-tight dark:text-zinc-100">
+        <span className="hidden text-[15px] font-semibold tracking-tight sm:inline dark:text-zinc-100">
           MyBibleVoice
         </span>
       </button>
 
+      {/* desktop nav */}
       <div className="hidden items-center gap-0.5 md:flex">
         {NAV_ITEMS.map((item) => (
           <button
@@ -65,6 +92,16 @@ export function Navbar({ user }: NavbarProps) {
       </div>
 
       <div className="ml-auto flex items-center gap-1.5">
+        {/* streak chip — mobile only */}
+        <button
+          onClick={onMenuClick}
+          aria-label="Open streak details"
+          className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[12px] font-medium text-zinc-700 transition-colors hover:border-zinc-400 lg:hidden dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+        >
+          <Icon name="flame" size={12} />
+          <span className="tabular-nums">{streak.count}</span>
+        </button>
+
         <ThemeToggle />
         <IconButton aria-label="Notifications" hasBadge>
           <Icon name="bell" />
@@ -94,19 +131,19 @@ export function Navbar({ user }: NavbarProps) {
                 }}
               />
               <MenuItem
-                icon="journal"
-                label="Weekly letter"
-                onClick={() => {
-                  setMenuOpen(false);
-                  navigate("/week/letter");
-                }}
-              />
-              <MenuItem
                 icon="settings"
                 label="Settings"
                 onClick={() => {
                   setMenuOpen(false);
                   navigate("/settings");
+                }}
+              />
+              <MenuItem
+                icon="journal"
+                label="Weekly letter"
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/week/letter");
                 }}
               />
               <div className="border-t border-zinc-100 dark:border-zinc-800">
