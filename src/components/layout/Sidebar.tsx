@@ -14,7 +14,7 @@ const items: NavRow[] = [
   { path: "/week", label: "This Week", icon: "calendar" },
   { path: "/plans", label: "Reading Plans", icon: "library" },
   { path: "/saved", label: "Saved", icon: "bookmark", showCount: true },
-  { path: "/stories", label: "Stories", icon: "library" },
+  { path: "/bible", label: "Bible Explorer", icon: "book" },
   { path: "/journal", label: "Journal", icon: "journal" },
   { path: "/community", label: "Community", icon: "journal" },
   { path: "/settings", label: "Settings", icon: "settings" },

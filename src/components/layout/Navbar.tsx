@@ -10,7 +10,7 @@ import type { User } from "../../types";
 
 const NAV_ITEMS = [
   { path: "/", label: "Today" },
-  { path: "/stories", label: "Stories" },
+  { path: "/bible", label: "Bible" },      
   { path: "/topics", label: "Topics" },
   { path: "/journal", label: "Journal" },
   { path: "/week", label: "Week" },

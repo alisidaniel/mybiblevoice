@@ -10,7 +10,7 @@ interface Tab {
 
 const TABS: Tab[] = [
   { id: "today", label: "Today", icon: "book", path: "/" },
-  { id: "stories", label: "Stories", icon: "library", path: "/stories" },
+  { id: "bible", label: "Bible", icon: "library", path: "/bible" },   
   { id: "plans", label: "Plans", icon: "calendar", path: "/plans" },
   { id: "journal", label: "Journal", icon: "journal", path: "/journal" },
   { id: "more", label: "More", icon: "settings", path: null },

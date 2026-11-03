@@ -7,7 +7,6 @@ import { OfflineBadge } from "./components/ui/OfflineBadge";
 
 
 import DailyFeed from "./pages/DailyFeed";
-import StoryExplorer from "./pages/StoryExplorer";
 import StoryDetail from "./pages/StoryDetail";
 import Journal from "./pages/Journal";
 import Topics from "./pages/Topics";
@@ -25,6 +24,7 @@ import ReadingPlans from "./pages/ReadingPlans";
 import PlanDetail from "./pages/PlanDetail";
 import Community from "./pages/Community";
 import NewPick from "./pages/NewPick";
+import BibleExplorer from "./pages/BibleExplorer";
 
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
@@ -81,10 +81,10 @@ export default function App() {
               <Route path="/" element={<DailyFeed />} />
               <Route path="/week" element={<Week />} />
               <Route path="/week/letter" element={<WeekLetter />} />
-              <Route path="/stories" element={<StoryExplorer />} />
-              <Route path="/stories/:id" element={<StoryDetail />} />
               <Route path="/journal" element={<Journal />} />
               <Route path="/topics" element={<Topics />} />
+              <Route path="/bible" element={<BibleExplorer />} />
+              <Route path="/stories/:id" element={<StoryDetail />} />
               <Route path="/saved" element={<Saved />} />
               <Route path="/community/:id" element={<CommunityDetail />} />
               <Route path="/community" element={<Community />} />

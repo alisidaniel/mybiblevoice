@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
-import { StoryCard } from "../components/stories/StoryCard";
-import { Badge } from "../components/ui/Badge";
-import { SemanticSearch } from "../components/search/SemanticSearch";
-import { allStories } from "../data/stories";
-import type { Testament } from "../types";
+import { StoryCard } from "../stories/StoryCard";
+import { Badge } from "../ui/Badge";
+import { SemanticSearch } from "../search/SemanticSearch";
+import { allStories } from "../../data/stories";
+import type { Testament } from "../../types";
 
 const allTags = Array.from(new Set(allStories.flatMap((s) => s.tags))).sort();
 
-export default function StoryExplorer() {
+export function StoriesTab() {
   const [testament, setTestament] = useState<Testament | "all">("all");
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
@@ -21,15 +21,6 @@ export default function StoryExplorer() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="font-serif text-[30px] leading-none tracking-tight text-zinc-900 dark:text-zinc-100">
-          Story Explorer
-        </h1>
-        <p className="mt-1.5 text-[13px] text-zinc-400">
-          {allStories.length} stories · {allTags.length} themes
-        </p>
-      </div>
-
       <SemanticSearch />
 
       <div className="flex flex-wrap items-center gap-2">
