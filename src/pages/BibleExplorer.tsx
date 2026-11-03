@@ -2,10 +2,11 @@ import { useState } from "react";
 import { BibleTabs, type BibleTab } from "../components/bible/BibleTabs";
 import { TopicTab } from "../components/bible/TopicTab";
 import { StoriesTab } from "../components/bible/StoriesTab";
+import { ReadTab } from "../components/bible/ReadTab";
 import { Icon } from "../components/ui/Icon";
 
 export default function BibleExplorer() {
-  const [tab, setTab] = useState<BibleTab>("topics");
+  const [tab, setTab] = useState<BibleTab>("read");
   const [credits] = useState(25);
 
   return (
@@ -27,7 +28,9 @@ export default function BibleExplorer() {
 
       <BibleTabs active={tab} onChange={setTab} />
 
-      {tab === "topics" ? <TopicTab /> : <StoriesTab />}
+      {tab === "read" && <ReadTab />}
+      {tab === "topics" && <TopicTab />}
+      {tab === "stories" && <StoriesTab />}
     </div>
   );
 }

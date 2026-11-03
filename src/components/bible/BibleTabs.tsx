@@ -1,4 +1,4 @@
-export type BibleTab = "topics" | "stories";
+export type BibleTab = "read" | "topics" | "stories";
 
 interface Props {
   active: BibleTab;
@@ -6,9 +6,10 @@ interface Props {
 }
 
 const TABS: { id: BibleTab; label: string }[] = [
-  { id: "topics", label: "Topics" },
-  { id: "stories", label: "Stories" },
-];
+    { id: "read", label: "Read" },
+    { id: "topics", label: "Topics" },
+    { id: "stories", label: "Stories" },
+  ];
 
 export function BibleTabs({ active, onChange }: Props) {
   return (

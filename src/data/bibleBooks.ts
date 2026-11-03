@@ -1,0 +1,121 @@
+import type { Book, Chapter } from "../types/bibleReader";
+
+export const books: Book[] = [
+  // Old Testament
+  { id: "GEN", name: "Genesis", testament: "OT", chapters: 50 },
+  { id: "EXO", name: "Exodus", testament: "OT", chapters: 40 },
+  { id: "LEV", name: "Leviticus", testament: "OT", chapters: 27 },
+  { id: "NUM", name: "Numbers", testament: "OT", chapters: 36 },
+  { id: "DEU", name: "Deuteronomy", testament: "OT", chapters: 34 },
+  { id: "JOS", name: "Joshua", testament: "OT", chapters: 24 },
+  { id: "JDG", name: "Judges", testament: "OT", chapters: 21 },
+  { id: "RUT", name: "Ruth", testament: "OT", chapters: 4 },
+  { id: "1SA", name: "1 Samuel", testament: "OT", chapters: 31 },
+  { id: "2SA", name: "2 Samuel", testament: "OT", chapters: 24 },
+  { id: "1KI", name: "1 Kings", testament: "OT", chapters: 22 },
+  { id: "2KI", name: "2 Kings", testament: "OT", chapters: 25 },
+  { id: "1CH", name: "1 Chronicles", testament: "OT", chapters: 29 },
+  { id: "2CH", name: "2 Chronicles", testament: "OT", chapters: 36 },
+  { id: "EZR", name: "Ezra", testament: "OT", chapters: 10 },
+  { id: "NEH", name: "Nehemiah", testament: "OT", chapters: 13 },
+  { id: "EST", name: "Esther", testament: "OT", chapters: 10 },
+  { id: "JOB", name: "Job", testament: "OT", chapters: 42 },
+  { id: "PSA", name: "Psalms", testament: "OT", chapters: 150 },
+  { id: "PRO", name: "Proverbs", testament: "OT", chapters: 31 },
+  { id: "ECC", name: "Ecclesiastes", testament: "OT", chapters: 12 },
+  { id: "SNG", name: "Song of Solomon", testament: "OT", chapters: 8 },
+  { id: "ISA", name: "Isaiah", testament: "OT", chapters: 66 },
+  { id: "JER", name: "Jeremiah", testament: "OT", chapters: 52 },
+  { id: "LAM", name: "Lamentations", testament: "OT", chapters: 5 },
+  { id: "EZK", name: "Ezekiel", testament: "OT", chapters: 48 },
+  { id: "DAN", name: "Daniel", testament: "OT", chapters: 12 },
+  { id: "HOS", name: "Hosea", testament: "OT", chapters: 14 },
+  { id: "JOL", name: "Joel", testament: "OT", chapters: 3 },
+  { id: "AMO", name: "Amos", testament: "OT", chapters: 9 },
+  { id: "OBA", name: "Obadiah", testament: "OT", chapters: 1 },
+  { id: "JON", name: "Jonah", testament: "OT", chapters: 4 },
+  { id: "MIC", name: "Micah", testament: "OT", chapters: 7 },
+  { id: "NAM", name: "Nahum", testament: "OT", chapters: 3 },
+  { id: "HAB", name: "Habakkuk", testament: "OT", chapters: 3 },
+  { id: "ZEP", name: "Zephaniah", testament: "OT", chapters: 3 },
+  { id: "HAG", name: "Haggai", testament: "OT", chapters: 2 },
+  { id: "ZEC", name: "Zechariah", testament: "OT", chapters: 14 },
+  { id: "MAL", name: "Malachi", testament: "OT", chapters: 4 },
+  // New Testament
+  { id: "MAT", name: "Matthew", testament: "NT", chapters: 28 },
+  { id: "MRK", name: "Mark", testament: "NT", chapters: 16 },
+  { id: "LUK", name: "Luke", testament: "NT", chapters: 24 },
+  { id: "JHN", name: "John", testament: "NT", chapters: 21 },
+  { id: "ACT", name: "Acts", testament: "NT", chapters: 28 },
+  { id: "ROM", name: "Romans", testament: "NT", chapters: 16 },
+  { id: "1CO", name: "1 Corinthians", testament: "NT", chapters: 16 },
+  { id: "2CO", name: "2 Corinthians", testament: "NT", chapters: 13 },
+  { id: "GAL", name: "Galatians", testament: "NT", chapters: 6 },
+  { id: "EPH", name: "Ephesians", testament: "NT", chapters: 6 },
+  { id: "PHP", name: "Philippians", testament: "NT", chapters: 4 },
+  { id: "COL", name: "Colossians", testament: "NT", chapters: 4 },
+  { id: "1TH", name: "1 Thessalonians", testament: "NT", chapters: 5 },
+  { id: "2TH", name: "2 Thessalonians", testament: "NT", chapters: 3 },
+  { id: "1TI", name: "1 Timothy", testament: "NT", chapters: 6 },
+  { id: "2TI", name: "2 Timothy", testament: "NT", chapters: 4 },
+  { id: "TIT", name: "Titus", testament: "NT", chapters: 3 },
+  { id: "PHM", name: "Philemon", testament: "NT", chapters: 1 },
+  { id: "HEB", name: "Hebrews", testament: "NT", chapters: 13 },
+  { id: "JAS", name: "James", testament: "NT", chapters: 5 },
+  { id: "1PE", name: "1 Peter", testament: "NT", chapters: 5 },
+  { id: "2PE", name: "2 Peter", testament: "NT", chapters: 3 },
+  { id: "1JN", name: "1 John", testament: "NT", chapters: 5 },
+  { id: "2JN", name: "2 John", testament: "NT", chapters: 1 },
+  { id: "3JN", name: "3 John", testament: "NT", chapters: 1 },
+  { id: "JUD", name: "Jude", testament: "NT", chapters: 1 },
+  { id: "REV", name: "Revelation", testament: "NT", chapters: 22 },
+];
+
+// ── Dummy chapter data (KJV) ───────────────────────────────────────
+// Real backend will fetch from your stored Bible DB.
+export const dummyChapters: Record<string, Chapter> = {
+  "PSA-23": {
+    bookId: "PSA",
+    bookName: "Psalms",
+    chapter: 23,
+    translation: "KJV",
+    verses: [
+      { number: 1, text: "The Lord is my shepherd; I shall not want." },
+      { number: 2, text: "He maketh me to lie down in green pastures: he leadeth me beside the still waters." },
+      { number: 3, text: "He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake." },
+      { number: 4, text: "Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me." },
+      { number: 5, text: "Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over." },
+      { number: 6, text: "Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the Lord for ever." },
+    ],
+  },
+  "JHN-3": {
+    bookId: "JHN",
+    bookName: "John",
+    chapter: 3,
+    translation: "KJV",
+    verses: [
+      { number: 16, text: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life." },
+      { number: 17, text: "For God sent not his Son into the world to condemn the world; but that the world through him might be saved." },
+    ],
+  },
+  "ROM-8": {
+    bookId: "ROM",
+    bookName: "Romans",
+    chapter: 8,
+    translation: "KJV",
+    verses: [
+      { number: 1, text: "There is therefore now no condemnation to them which are in Christ Jesus, who walk not after the flesh, but after the Spirit." },
+      { number: 28, text: "And we know that all things work together for good to them that love God, to them who are the called according to his purpose." },
+      { number: 31, text: "What shall we then say to these things? If God be for us, who can be against us?" },
+      { number: 38, text: "For I am persuaded, that neither death, nor life, nor angels, nor principalities, nor powers, nor things present, nor things to come," },
+      { number: 39, text: "Nor height, nor depth, nor any other creature, shall be able to separate us from the love of God, which is in Christ Jesus our Lord." },
+    ],
+  },
+};
+
+export function getDummyChapter(
+  bookId: string,
+  chapter: number
+): Chapter | null {
+  return dummyChapters[`${bookId}-${chapter}`] ?? null;
+}
